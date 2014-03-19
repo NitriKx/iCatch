@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/iCatch.iml" filepath="$PROJECT_DIR$/iCatch.iml" />
+      <module fileurl="file://$PROJECT_DIR$/iCatch/iCatch-iCatch.iml" filepath="$PROJECT_DIR$/iCatch/iCatch-iCatch.iml" />
+    </modules>
+  </component>
+</project>
+
