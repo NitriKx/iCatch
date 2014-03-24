@@ -25,4 +25,11 @@
     <!-- Main buttons -->
     <string name="btn_stop">Pause</string>
     <string name="btn_start">Start</string>
+
+    <!-- Gameover popup -->
+    <string name="alertdialog_gameover_title">Game over !</string>
+    <string name="alertdialog_gameover_text"></string>
+    <string name="alertdialog_gameover_buttontext">Ok</string>
+    <string name="preference_activity_title">Preferences</string>
+
 </resources>

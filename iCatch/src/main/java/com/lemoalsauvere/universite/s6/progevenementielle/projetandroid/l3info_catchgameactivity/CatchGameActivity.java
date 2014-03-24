@@ -6,12 +6,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.PopupMenu;
 import com.lemoalsauvere.universite.s6.progevenementielle.projetandroid.R;
 import com.lemoalsauvere.universite.s6.progevenementielle.projetandroid.l3info_catchgamedatastructure.Fruit;
+import com.lemoalsauvere.universite.s6.progevenementielle.projetandroid.l3info_catchgamedatastructure.ScoreController;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,10 +47,11 @@ public class CatchGameActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				buttonStartClickEventHandler();
-				
 			}
 
 		});
+
+
 
         fruitList = new ArrayList<Fruit>();
 		testInitFruitList();
@@ -56,14 +59,36 @@ public class CatchGameActivity extends Activity {
 		
 	}
 
-    private void testInitFruitList() {
+    public boolean isGameRunning() {
+        return this.timerFallingFruits != null && launched;
+    }
 
+    public void resetGame() {
+        // If the game is running we click the pause button
+        if(isGameRunning()) {
+            startAndPauseButtonPressed();
+        }
+
+        // Clear all the apples and restore the initial ones
+        this.fruitList.clear();
+        testInitFruitList();
+
+        // Reset the score and the lifes
+        ScoreController.getInstance().reset();
+
+        fruitView.resetView();
+    }
+
+    private void testInitFruitList() {
 		fruitList.add(new Fruit(new Point(15, 15)));
 		fruitList.add(new Fruit(new Point(15, 630)));
-		
 	}
 
 	private void buttonStartClickEventHandler() {
+        startAndPauseButtonPressed();
+	}
+
+    public void startAndPauseButtonPressed() {
         if(launched) {
             this.stopFallTimer();
             this.stopSpawnTimer();
@@ -75,7 +100,7 @@ public class CatchGameActivity extends Activity {
             bStart.setText(getResources().getString(R.string.btn_stop));
             launched = true;
         }
-	}
+    }
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -83,6 +108,24 @@ public class CatchGameActivity extends Activity {
 		getMenuInflater().inflate(R.menu.catch_game, menu);
 		return true;
 	}
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                // Show the settingd
+                return true;
+            case R.id.action_leaderboard:
+                // Show the leaderboard
+                return true;
+            case R.id.action_restart:
+                this.resetGame();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
     public void initFallTimer(){
         timerFallingFruits = new Timer();

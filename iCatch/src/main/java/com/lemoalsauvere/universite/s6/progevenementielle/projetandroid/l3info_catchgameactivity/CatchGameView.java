@@ -2,7 +2,9 @@ package com.lemoalsauvere.universite.s6.progevenementielle.projetandroid.l3info_
 
 import android.R.color;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.*;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -29,6 +31,8 @@ public class CatchGameView extends View {
 	Bitmap applePict = BitmapFactory.decodeResource(getResources(), R.drawable.apple);
     int yAxisFallingFactor = 5;
 
+    final CatchGameActivity catchGameActivity = (CatchGameActivity) this.getContext();
+
 	
 	public CatchGameView(Context context) {
 		super(context);
@@ -51,31 +55,34 @@ public class CatchGameView extends View {
         // Let the ScaleGestureDetector inspect all events.
         super.onTouchEvent(event);
 
-        int action = event.getActionMasked();
+        // We only kill an apple if the game is running
+        if(catchGameActivity.isGameRunning()) {
 
-        // If the user press the screen
-        switch (action) {
-            case MotionEvent.ACTION_DOWN: {
+            // If the user press the screen
+            int action = event.getActionMasked();
+            switch (action) {
+                case MotionEvent.ACTION_DOWN: {
 
-                Log.i(this.getClass().getSimpleName(), "View touched");
+                    Log.i(this.getClass().getSimpleName(), "View touched");
 
-                // This logic is synchronized in order to avoid the "multiple event for on press" problem
-                synchronized (CatchGameView.class) {
+                    // This logic is synchronized in order to avoid the "multiple event for on press" problem
+                    synchronized (CatchGameView.class) {
 
-                    Iterator<Map.Entry<Fruit,Rect>> i = this.appleHitboxes.entrySet().iterator();
-                    while(i.hasNext()) {
-                        Map.Entry<Fruit, Rect> entry = i.next();
-                        if(this.appleHitboxes.containsKey(entry.getKey())) {
-                            Rect fruitHitbox = entry.getValue();
-                            if(fruitHitbox.contains((int) event.getY(), (int) event.getX())) {
-                                this.fallingDownFruitsList.remove(entry.getKey());
-                                i.remove();
+                        Iterator<Map.Entry<Fruit,Rect>> i = this.appleHitboxes.entrySet().iterator();
+                        while(i.hasNext()) {
+                            Map.Entry<Fruit, Rect> entry = i.next();
+                            if(this.appleHitboxes.containsKey(entry.getKey())) {
+                                Rect fruitHitbox = entry.getValue();
+                                if(fruitHitbox.contains((int) event.getY(), (int) event.getX())) {
+                                    this.fallingDownFruitsList.remove(entry.getKey());
+                                    i.remove();
 
-                                    ScoreController.getInstance().incrementScoreByOne();
+                                        ScoreController.getInstance().incrementScoreByOne();
+                                    }
+                                    Log.i(this.getClass().getSimpleName(), "Fruit removed because it was clicked.");
                                 }
-                                Log.i(this.getClass().getSimpleName(), "Fruit removed because it was clicked.");
                             }
-                        }
+                    }
                 }
             }
         }
@@ -99,23 +106,46 @@ public class CatchGameView extends View {
                 ScoreController.getInstance().looseLife();
                 Log.i(this.getClass().getSimpleName(), "Fruit removed because it reaches the bottom of the screen.");
 
+                // If the player is dead we show the "GameOver" popver an then we reset the game
+                if(ScoreController.getInstance().getLife() == 0) {
+                    catchGameActivity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            // Pause the game
+                            catchGameActivity.startAndPauseButtonPressed();
+
+                            // Create and display the popup
+                            AlertDialog gameOverPopup = new AlertDialog.Builder(catchGameActivity)
+                                    .setTitle(R.string.alertdialog_gameover_title)
+                                    .setMessage(String.format("You lost all your life. The game is over and your score is %d.", ScoreController.getInstance().getScore()))
+                                    .setCancelable(true)
+                                    .setNeutralButton(R.string.alertdialog_gameover_buttontext, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.cancel();
+                                        }
+                                    })
+                                    .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                        @Override
+                                        public void onDismiss(DialogInterface dialog) {
+                                            catchGameActivity.resetGame();
+                                        }
+                                    })
+                                    .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                                        @Override
+                                        public void onCancel(DialogInterface dialog) {
+                                            catchGameActivity.resetGame();
+                                        }
+                                    })
+                                    .create();
+                            gameOverPopup.show();
+                        }
+                    });
+                }
             } else {
                 fruit.setLocation(currentFruitLocation);
             }
         }
-
-        final Activity parent = (Activity) this.getContext();
-        parent.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-
-                // Refresh score and life
-                ((TextView) parent.findViewById(R.id.textScore)).setText(ScoreController.getInstance().getScore() + "");
-                ((TextView) parent.findViewById(R.id.textVie)).setText(ScoreController.getInstance().getLife() + "");
-
-            }
-        });
-
 
         this.postInvalidate();
 	}
@@ -131,6 +161,15 @@ public class CatchGameView extends View {
 
         canvas.drawColor(color.holo_green_dark);
 
+        catchGameActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                // Refresh score and life
+                ((TextView) catchGameActivity.findViewById(R.id.textScore)).setText(ScoreController.getInstance().getScore() + "");
+                ((TextView) catchGameActivity.findViewById(R.id.textVie)).setText(ScoreController.getInstance().getLife() + "");
+            }
+        });
+
         // This array is a special ArrayList which guarantee that the iterator will never throw a ConcurrentModificationException
         CopyOnWriteArrayList<Fruit> copyOnWriteArrayList = new CopyOnWriteArrayList<Fruit>(fallingDownFruitsList);
         for (Fruit fruit : copyOnWriteArrayList){
@@ -141,4 +180,9 @@ public class CatchGameView extends View {
         }
 	}
 
+    public void resetView() {
+        this.appleHitboxes.clear();
+        //Redraw
+        this.postInvalidate();
+    }
 }
