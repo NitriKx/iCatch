@@ -75,11 +75,16 @@ public class CatchGameView extends View {
 
             if(currentFruitLocation.x >= viewSize.x) {
                 deleteFruit(fruit);
+                ScoreController.getInstance().looseLife(); // TODO Récupérer le booléen pour le GAME-OVER
                 Log.i(this.getClass().getSimpleName(), "Fruit removed because it reaches the bottom of the screen.");
             } else {
                 fruit.setLocation(currentFruitLocation);
             }
         }
+
+        // Refresh score
+        ((TextView) ((Activity) this.getContext()).findViewById(R.id.textScore)).setText(ScoreController.getInstance().getScore() + "");
+
 
         this.postInvalidate();
 	}
@@ -101,8 +106,6 @@ public class CatchGameView extends View {
 	@Override
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
-
-        ((TextView) ((Activity) this.getContext()).findViewById(R.id.textScore)).setText(ScoreController.getInstance().getScore() + "");
 
 		canvas.drawColor(color.holo_green_dark);
 
