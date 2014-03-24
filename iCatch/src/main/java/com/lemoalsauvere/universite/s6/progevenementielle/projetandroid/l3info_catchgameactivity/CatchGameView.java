@@ -27,9 +27,8 @@ public class CatchGameView extends View {
     Map<Fruit, Rect> appleHitboxes = new HashMap<Fruit, Rect>();
 	Bitmap applePict = BitmapFactory.decodeResource(getResources(), R.drawable.apple);
 	Bitmap applePict2 = BitmapFactory.decodeResource(getResources(),R.drawable.apple);
-	int fruitFallDelay = 1000;
     int yAxisFallingFactor = 50;
-	Timer timerFallingFruits;
+
 	
 	public CatchGameView(Context context) {
 		super(context);
@@ -44,23 +43,7 @@ public class CatchGameView extends View {
 	public CatchGameView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		fallingDownFruitsList.clear();
-	}
-	
-	public void initTimer(){
-		timerFallingFruits = new Timer();
-		timerFallingFruits.schedule(new TimerTask() {
-			@Override
-			public void run() {
-				timerEventHandler();
-			}
-
-		}, 0, fruitFallDelay);
-
-	}
-	
-	public void stopTimer(){
-		timerFallingFruits.cancel();
-	}
+    }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -84,7 +67,7 @@ public class CatchGameView extends View {
         return true;
     }
 
-	private void timerEventHandler(){
+	public void refreshView(){
 
         Log.i(this.getClass().getSimpleName(), "Making the fruits fallen...");
 
@@ -128,10 +111,6 @@ public class CatchGameView extends View {
         this.appleHitboxes.remove(f);
         this.fallingDownFruitsList.remove(f);
     }
-	
-	public void setFruitFallDelay(int delay){
-		fruitFallDelay = delay;
-	}
 	
 	public void setFruitList(List<Fruit> fruitList){
 		this.fallingDownFruitsList = fruitList;

@@ -12,6 +12,8 @@ import com.lemoalsauvere.universite.s6.progevenementielle.projetandroid.l3info_c
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /* 
  * Main screen for the game
@@ -19,7 +21,8 @@ import java.util.List;
  * To be modified to implement your own version of the game
  */
 public class CatchGameActivity extends Activity {
-
+    Timer timerFallingFruits;
+    int fruitFallDelay = 1000;
 	List<Fruit> fruitList;
 	CatchGameView fruitView;
 	Button bStart;
@@ -57,7 +60,7 @@ public class CatchGameActivity extends Activity {
 	}
 
     private void buttonStopClickEventHandler() {
-        fruitView.stopTimer();
+        this.stopTimer();
         bStop.setEnabled(false);
         bStart.setEnabled(true);
     }
@@ -70,7 +73,7 @@ public class CatchGameActivity extends Activity {
 	}
 
 	private void buttonStartClickEventHandler() {
-		fruitView.initTimer();		
+		this.initTimer();
 		bStop.setEnabled(true);
 		bStart.setEnabled(false);
 	}
@@ -81,5 +84,23 @@ public class CatchGameActivity extends Activity {
 		getMenuInflater().inflate(R.menu.catch_game, menu);
 		return true;
 	}
+
+    public void initTimer(){
+        timerFallingFruits = new Timer();
+        timerFallingFruits.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                fruitView.refreshView();
+            }
+
+        }, 0, fruitFallDelay);
+
+    }
+
+    public void stopTimer(){
+        timerFallingFruits.cancel();
+    }
+
+
 
 }
