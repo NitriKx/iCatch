@@ -15,21 +15,21 @@ public class ScoreController {
         return sc;
     }
 
-    public int getScore() {
+    public synchronized int getScore() {
         return score;
     }
 
-    public void setScore(int score) {
+    public synchronized void setScore(int score) {
         this.score = score;
     }
 
-    public void incrementScoreByOne() {this.score++;}
+    public synchronized void incrementScoreByOne() {this.score++;}
 
     /**
      *
      * @return true if life is > 0 after loosing one
      */
-    public boolean looseLife() {
+    public synchronized boolean looseLife() {
         if (life > 0) {
             life--;
         }
@@ -37,16 +37,16 @@ public class ScoreController {
         return life > 0;
     }
 
-    public int getLife() {
+    public synchronized int getLife() {
         return life;
     }
 
-    public void reset() {
+    public synchronized void reset() {
         score = 0;
         life = 3;
     }
 
-    public void addScore(int add) {
+    public synchronized void addScore(int add) {
         score += add;
     }
 }

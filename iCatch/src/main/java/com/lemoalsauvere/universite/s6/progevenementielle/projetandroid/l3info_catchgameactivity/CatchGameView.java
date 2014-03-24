@@ -15,6 +15,7 @@ import com.lemoalsauvere.universite.s6.progevenementielle.projetandroid.l3info_c
 import com.lemoalsauvere.universite.s6.progevenementielle.projetandroid.l3info_catchgamedatastructure.ScoreController;
 
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /* 
  * Custom view for displaying falling fruits
@@ -24,7 +25,7 @@ import java.util.*;
 public class CatchGameView extends View {
 
 	List<Fruit> fallingDownFruitsList = new ArrayList<Fruit>();
-    Map<Fruit, Rect> appleHitboxes = new HashMap<Fruit, Rect>();
+    Map<Fruit, Rect> appleHitboxes = Collections.synchronizedMap(new HashMap<Fruit, Rect>());
 	Bitmap applePict = BitmapFactory.decodeResource(getResources(), R.drawable.apple);
 	Bitmap applePict2 = BitmapFactory.decodeResource(getResources(),R.drawable.apple);
     int yAxisFallingFactor = 5;
@@ -58,7 +59,9 @@ public class CatchGameView extends View {
                 if(fruitHitbox.contains((int) event.getY(), (int) event.getX())) {
                     this.fallingDownFruitsList.remove(entry.getKey());
                     i.remove();
-                    ScoreController.getInstance().incrementScoreByOne();
+                    synchronized (CatchGameView.class) {
+                        ScoreController.getInstance().incrementScoreByOne();
+                    }
                     Log.i(this.getClass().getSimpleName(), "Fruit removed because it was clicked.");
                 }
             }
@@ -83,6 +86,7 @@ public class CatchGameView extends View {
                 iterator.remove();
                 ScoreController.getInstance().looseLife();
                 Log.i(this.getClass().getSimpleName(), "Fruit removed because it reaches the bottom of the screen.");
+
             } else {
                 fruit.setLocation(currentFruitLocation);
             }
@@ -93,7 +97,7 @@ public class CatchGameView extends View {
             @Override
             public void run() {
 
-                // Refresh score
+                // Refresh score and life
                 ((TextView) parent.findViewById(R.id.textScore)).setText(ScoreController.getInstance().getScore() + "");
                 ((TextView) parent.findViewById(R.id.textVie)).setText(ScoreController.getInstance().getLife() + "");
 
@@ -103,11 +107,6 @@ public class CatchGameView extends View {
 
         this.postInvalidate();
 	}
-
-    private void deleteFruit(Fruit f) {
-        this.appleHitboxes.remove(f);
-        this.fallingDownFruitsList.remove(f);
-    }
 	
 	public void setFruitList(List<Fruit> fruitList){
 		this.fallingDownFruitsList = fruitList;
@@ -118,15 +117,16 @@ public class CatchGameView extends View {
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
 
-		canvas.drawColor(color.holo_green_dark);
+        canvas.drawColor(color.holo_green_dark);
 
-		for (Fruit fruit : fallingDownFruitsList){
+        // This array is a special ArrayList which guarantee that the iterator will never throw a ConcurrentModificationException
+        CopyOnWriteArrayList<Fruit> copyOnWriteArrayList = new CopyOnWriteArrayList<Fruit>(fallingDownFruitsList);
+        for (Fruit fruit : copyOnWriteArrayList){
             Rect fruitBounds = new Rect(fruit.getLocationInScreen().x, fruit.getLocationInScreen().y,
                     fruit.getLocationInScreen().x + applePict.getWidth(), fruit.getLocationInScreen().y + applePict.getHeight());
-			canvas.drawBitmap(applePict, fruitBounds.top, fruitBounds.left, null);
+            canvas.drawBitmap(applePict, fruitBounds.top, fruitBounds.left, null);
             this.appleHitboxes.put(fruit, fruitBounds);
-		}
-		
+        }
 	}
 
 }
