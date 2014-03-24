@@ -63,6 +63,7 @@ public class CatchGameView extends View {
 	
 	private void timerEventHandler(){
 		Log.i("CatchGameView", "timer event handler");
+        this.postInvalidate();
 	}
 	
 	public void setFruitFallDelay(int delay){
