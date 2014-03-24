@@ -15,8 +15,29 @@ public class Fruit {
 		locationInScreen = location;
 		radius = rad;
 	}
-	
-	public void setLocation(Point p){
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Fruit)) return false;
+
+        Fruit fruit = (Fruit) o;
+
+        if (radius != fruit.radius) return false;
+        if (locationInScreen != null ? !locationInScreen.equals(fruit.locationInScreen) : fruit.locationInScreen != null)
+            return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = locationInScreen != null ? locationInScreen.hashCode() : 0;
+        result = 31 * result + radius;
+        return result;
+    }
+
+    public void setLocation(Point p){
 		locationInScreen = p;
 	}
 	
