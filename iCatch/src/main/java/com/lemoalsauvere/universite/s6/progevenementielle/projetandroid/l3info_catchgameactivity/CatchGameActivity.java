@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -107,6 +108,24 @@ public class CatchGameActivity extends Activity {
 		getMenuInflater().inflate(R.menu.catch_game, menu);
 		return true;
 	}
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                // Show the settingd
+                return true;
+            case R.id.action_leaderboard:
+                // Show the leaderboard
+                return true;
+            case R.id.action_restart:
+                this.resetGame();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
     public void initFallTimer(){
         timerFallingFruits = new Timer();
