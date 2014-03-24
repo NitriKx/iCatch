@@ -23,6 +23,8 @@ public class ScoreController {
         this.score = score;
     }
 
+    public void incrementScoreByOne() {this.score++;}
+
     /**
      *
      * @return true if life is > 0 after loosing one

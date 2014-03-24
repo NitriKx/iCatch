@@ -7,6 +7,7 @@ import android.graphics.*;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Display;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 import com.lemoalsauvere.universite.s6.progevenementielle.projetandroid.R;
@@ -60,7 +61,29 @@ public class CatchGameView extends View {
 	public void stopTimer(){
 		timerFallingFruits.cancel();
 	}
-	
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+
+        Log.i(this.getClass().getSimpleName(), "View touched");
+
+        Iterator<Map.Entry<Fruit,Rect>> i = this.appleHitboxes.entrySet().iterator();
+        while(i.hasNext()) {
+            Map.Entry<Fruit, Rect> entry = i.next();
+            if(this.appleHitboxes.containsKey(entry.getKey())) {
+                Rect fruitHitbox = entry.getValue();
+                if(fruitHitbox.contains((int) event.getY(), (int) event.getX())) {
+                    this.fallingDownFruitsList.remove(entry.getKey());
+                    i.remove();
+                    ScoreController.getInstance().incrementScoreByOne();
+                    Log.i(this.getClass().getSimpleName(), "Fruit removed because it was clicked.");
+                }
+            }
+        }
+
+        return true;
+    }
+
 	private void timerEventHandler(){
 
         Log.i(this.getClass().getSimpleName(), "Making the fruits fallen...");
@@ -69,21 +92,32 @@ public class CatchGameView extends View {
         Point viewSize = new Point();
         this.getDisplay().getSize(viewSize);
 
-        for(Fruit fruit : this.fallingDownFruitsList) {
+        Iterator<Fruit> iterator = this.fallingDownFruitsList.iterator();
+        while(iterator.hasNext()) {
+            Fruit fruit = iterator.next();
             Point currentFruitLocation = fruit.getLocationInScreen();
             currentFruitLocation.x += yAxisFallingFactor;
 
-            if(currentFruitLocation.x >= viewSize.x) {
-                deleteFruit(fruit);
-                ScoreController.getInstance().looseLife(); // TODO Récupérer le booléen pour le GAME-OVER
+            if(currentFruitLocation.x >= viewSize.y) {
+                this.appleHitboxes.remove(fruit);
+                iterator.remove();
+                ScoreController.getInstance().looseLife();
                 Log.i(this.getClass().getSimpleName(), "Fruit removed because it reaches the bottom of the screen.");
             } else {
                 fruit.setLocation(currentFruitLocation);
             }
         }
 
-        // Refresh score
-        ((TextView) ((Activity) this.getContext()).findViewById(R.id.textScore)).setText(ScoreController.getInstance().getScore() + "");
+        final Activity parent = (Activity) this.getContext();
+        parent.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+                // Refresh score
+                ((TextView) parent.findViewById(R.id.textScore)).setText(ScoreController.getInstance().getScore() + "");
+
+            }
+        });
 
 
         this.postInvalidate();
@@ -110,8 +144,9 @@ public class CatchGameView extends View {
 		canvas.drawColor(color.holo_green_dark);
 
 		for (Fruit fruit : fallingDownFruitsList){
-            Rect fruitBounds = new Rect(fruit.getLocationInScreen().x, fruit.getLocationInScreen().y, 2*(fruit.getRadius()), 2*(fruit.getRadius()));
-			canvas.drawBitmap(applePict, fruitBounds.top, fruitBounds.left,null);
+            Rect fruitBounds = new Rect(fruit.getLocationInScreen().x, fruit.getLocationInScreen().y,
+                    fruit.getLocationInScreen().x + applePict.getWidth(), fruit.getLocationInScreen().y + applePict.getHeight());
+			canvas.drawBitmap(applePict, fruitBounds.top, fruitBounds.left, null);
             this.appleHitboxes.put(fruit, fruitBounds);
 		}
 		
