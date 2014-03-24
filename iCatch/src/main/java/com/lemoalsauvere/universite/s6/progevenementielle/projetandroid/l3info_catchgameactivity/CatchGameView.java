@@ -2,10 +2,7 @@ package com.lemoalsauvere.universite.s6.progevenementielle.projetandroid.l3info_
 
 import android.R.color;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Rect;
+import android.graphics.*;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -24,10 +21,11 @@ import java.util.TimerTask;
  */
 public class CatchGameView extends View {
 
-	List<Rect> fallingDownFruitsList = new ArrayList<Rect>();
+	List<Fruit> fallingDownFruitsList = new ArrayList<Fruit>();
 	Bitmap applePict = BitmapFactory.decodeResource(getResources(), R.drawable.apple);
 	Bitmap applePict2 = BitmapFactory.decodeResource(getResources(),R.drawable.apple);
 	int fruitFallDelay = 1000;
+    int yAxisFallingFactor = 10;
 	Timer timerFallingFruits;
 	
 	public CatchGameView(Context context) {
@@ -47,14 +45,14 @@ public class CatchGameView extends View {
 	
 	public void initTimer(){
 		timerFallingFruits = new Timer();
-		timerFallingFruits.schedule(new TimerTask() {			
+		timerFallingFruits.schedule(new TimerTask() {
 			@Override
 			public void run() {
 				timerEventHandler();
 			}
-			
+
 		}, 0, fruitFallDelay);
-		
+
 	}
 	
 	public void stopTimer(){
@@ -62,7 +60,15 @@ public class CatchGameView extends View {
 	}
 	
 	private void timerEventHandler(){
-		Log.i("CatchGameView", "timer event handler");
+
+        Log.i("CatchGameView", "Making the fruits fallen...");
+
+        // For each apple, we change its positions
+        for(Fruit fruit : this.fallingDownFruitsList) {
+            Point currentFruitLocation = fruit.getLocationInScreen();
+            currentFruitLocation.x += yAxisFallingFactor;
+            fruit.setLocation(currentFruitLocation);
+        }
         this.postInvalidate();
 	}
 	
@@ -71,12 +77,7 @@ public class CatchGameView extends View {
 	}
 	
 	public void setFruitList(List<Fruit> fruitList){
-		Rect fruitBounds;
-		fallingDownFruitsList.clear();
-		for (Fruit fruit:fruitList){
-			fruitBounds = new Rect(fruit.getLocationInScreen().x, fruit.getLocationInScreen().y, 2*(fruit.getRadius()), 2*(fruit.getRadius()));
-			fallingDownFruitsList.add(fruitBounds);
-		}
+		this.fallingDownFruitsList = fruitList;
 	}
 	
 	
@@ -84,8 +85,9 @@ public class CatchGameView extends View {
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
 		canvas.drawColor(color.holo_green_dark);
-		
-		for (Rect fruitBounds:fallingDownFruitsList){
+
+		for (Fruit fruit : fallingDownFruitsList){
+            Rect fruitBounds = new Rect(fruit.getLocationInScreen().x, fruit.getLocationInScreen().y, 2*(fruit.getRadius()), 2*(fruit.getRadius()));
 			canvas.drawBitmap(applePict, fruitBounds.top, fruitBounds.left,null);
 		}
 		
