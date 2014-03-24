@@ -43,13 +43,26 @@ public class CatchGameActivity extends Activity {
 			}
 
 		});
-		
+
+        bStop.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                buttonStopClickEventHandler();
+            }
+        });
+
 		testInitFruitList();
 		fruitView.setFruitList(fruitList);
 		
 	}
 
-	private void testInitFruitList() {
+    private void buttonStopClickEventHandler() {
+        fruitView.stopTimer();
+        bStop.setEnabled(false);
+        bStart.setEnabled(true);
+    }
+
+    private void testInitFruitList() {
 		fruitList = new ArrayList<Fruit>();
 		fruitList.add(new Fruit(new Point(15, 15), 22));
 		fruitList.add(new Fruit(new Point(215, 255), 22));
