@@ -9,11 +9,9 @@ import android.graphics.Point;
 public class Fruit {
 
 	private Point locationInScreen; //Where the fruit is located
-	private int radius; // How big is the fruit
 	
-	public Fruit(Point location, int rad){
+	public Fruit(Point location){
 		locationInScreen = location;
-		radius = rad;
 	}
 
     @Override
@@ -23,7 +21,6 @@ public class Fruit {
 
         Fruit fruit = (Fruit) o;
 
-        if (radius != fruit.radius) return false;
         if (locationInScreen != null ? !locationInScreen.equals(fruit.locationInScreen) : fruit.locationInScreen != null)
             return false;
 
@@ -33,7 +30,7 @@ public class Fruit {
     @Override
     public int hashCode() {
         int result = locationInScreen != null ? locationInScreen.hashCode() : 0;
-        result = 31 * result + radius;
+        result = 31 * result;
         return result;
     }
 
@@ -44,12 +41,5 @@ public class Fruit {
 	public Point getLocationInScreen() {
 		return locationInScreen;
 	}
-	
-	public void setRadius(int radius) {
-		this.radius = radius;
-	}
-	
-	public int getRadius() {
-		return radius;
-	}
+
 }

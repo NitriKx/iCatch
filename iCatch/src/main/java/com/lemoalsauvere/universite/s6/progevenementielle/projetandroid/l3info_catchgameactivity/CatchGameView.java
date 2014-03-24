@@ -27,7 +27,7 @@ public class CatchGameView extends View {
     Map<Fruit, Rect> appleHitboxes = new HashMap<Fruit, Rect>();
 	Bitmap applePict = BitmapFactory.decodeResource(getResources(), R.drawable.apple);
 	Bitmap applePict2 = BitmapFactory.decodeResource(getResources(),R.drawable.apple);
-    int yAxisFallingFactor = 50;
+    int yAxisFallingFactor = 5;
 
 	
 	public CatchGameView(Context context) {
@@ -69,19 +69,16 @@ public class CatchGameView extends View {
 
 	public void refreshView(){
 
-        Log.i(this.getClass().getSimpleName(), "Making the fruits fallen...");
+        // Log.i(this.getClass().getSimpleName(), "Making the fruits fallen...");
 
         // For each apple, we change its positions
-        Point viewSize = new Point();
-        this.getDisplay().getSize(viewSize);
-
         Iterator<Fruit> iterator = this.fallingDownFruitsList.iterator();
         while(iterator.hasNext()) {
             Fruit fruit = iterator.next();
             Point currentFruitLocation = fruit.getLocationInScreen();
             currentFruitLocation.x += yAxisFallingFactor;
 
-            if(currentFruitLocation.x >= viewSize.y) {
+            if(currentFruitLocation.x >= this.getBottom() - 200) {
                 this.appleHitboxes.remove(fruit);
                 iterator.remove();
                 ScoreController.getInstance().looseLife();

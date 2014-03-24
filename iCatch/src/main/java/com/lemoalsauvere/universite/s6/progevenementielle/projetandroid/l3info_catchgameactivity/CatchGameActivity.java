@@ -3,6 +3,7 @@ package com.lemoalsauvere.universite.s6.progevenementielle.projetandroid.l3info_
 import android.app.Activity;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -22,7 +23,9 @@ import java.util.TimerTask;
  */
 public class CatchGameActivity extends Activity {
     Timer timerFallingFruits;
-    int fruitFallDelay = 1000;
+    Timer timerSpawnFruits;
+    int fruitFallDelay = 50;
+    int fruitSpawnDelay = 600;
 	List<Fruit> fruitList;
 	CatchGameView fruitView;
 	Button bStart;
@@ -54,26 +57,29 @@ public class CatchGameActivity extends Activity {
             }
         });
 
+        fruitList = new ArrayList<Fruit>();
 		testInitFruitList();
 		fruitView.setFruitList(fruitList);
 		
 	}
 
     private void buttonStopClickEventHandler() {
-        this.stopTimer();
+        this.stopFallTimer();
+        this.stopSpawnTimer();
         bStop.setEnabled(false);
         bStart.setEnabled(true);
     }
 
     private void testInitFruitList() {
-		fruitList = new ArrayList<Fruit>();
-		fruitList.add(new Fruit(new Point(15, 15), 25));
-		fruitList.add(new Fruit(new Point(15, 630), 25));
+
+		fruitList.add(new Fruit(new Point(15, 15)));
+		fruitList.add(new Fruit(new Point(15, 630)));
 		
 	}
 
 	private void buttonStartClickEventHandler() {
-		this.initTimer();
+		this.initFallTimer();
+        this.initSpawnTimer();
 		bStop.setEnabled(true);
 		bStart.setEnabled(false);
 	}
@@ -85,7 +91,7 @@ public class CatchGameActivity extends Activity {
 		return true;
 	}
 
-    public void initTimer(){
+    public void initFallTimer(){
         timerFallingFruits = new Timer();
         timerFallingFruits.schedule(new TimerTask() {
             @Override
@@ -93,14 +99,29 @@ public class CatchGameActivity extends Activity {
                 fruitView.refreshView();
             }
 
-        }, 0, fruitFallDelay);
-
+        }, fruitFallDelay, fruitFallDelay);
     }
 
-    public void stopTimer(){
+    public void stopFallTimer(){
         timerFallingFruits.cancel();
     }
 
+    public void initSpawnTimer(){
+        timerSpawnFruits = new Timer();
+        timerSpawnFruits.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                Log.i("Spawn : ", (int) (Math.random() * (fruitView.getWidth() - 50)) + "");
+                fruitList.add(new Fruit(new Point(15, (int) (Math.random() * (fruitView.getWidth() - 50)))));
+            }
 
+        }, 0, fruitSpawnDelay);
+    }
+
+
+
+    public void stopSpawnTimer(){
+        timerSpawnFruits.cancel();
+    }
 
 }
