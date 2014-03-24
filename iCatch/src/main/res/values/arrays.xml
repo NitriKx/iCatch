@@ -5,7 +5,7 @@
         <item name="2">Medium</item>
         <item name="3">Hard</item>
     </string-array>
-    <string-array name="nbLifes">
+    <string-array name="nbLives">
         <item name="1">1</item>
         <item name="2">2</item>
         <item name="3">3</item>

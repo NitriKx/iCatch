@@ -1,19 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
-n
+    <PreferenceCategory android:title="@string/pref_user_profile" >
+        <EditTextPreference
+                android:title="@string/pref_user_setname"
+                android:key="prefUsername"
+                android:defaultValue="@string/def_username" />
+    </PreferenceCategory>
+
     <PreferenceCategory android:title="@string/pref_game_settings" >
         <ListPreference
                 android:key="prefDifficulty"
                 android:entries="@array/difficulty"
                 android:entryValues="@array/difficulty"
-                android:title="@string/pref_game_difficulty" />
+                android:title="@string/pref_game_difficulty"
+                android:defaultValue="Medium"/>
 
         <ListPreference
-                android:key="prefNbLifes"
-                android:entries="@array/nbLifes"
-                android:entryValues="@array/nbLifes"
-                android:title="@string/pref_game_lifes" />
+                android:key="prefNbLives"
+                android:entries="@array/nbLives"
+                android:entryValues="@array/nbLives"
+                android:title="@string/pref_game_lives"
+                android:defaultValue="3" />
     </PreferenceCategory>
 
 </PreferenceScreen>

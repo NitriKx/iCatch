@@ -1,8 +1,10 @@
 package com.lemoalsauvere.universite.s6.progevenementielle.projetandroid.l3info_catchgameactivity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -38,6 +40,9 @@ public class CatchGameActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+        PreferenceManager.setDefaultValues(this, R.xml.settings, false);
+
 		setContentView(R.layout.activity_catch_game);
 		fruitView = (CatchGameView)findViewById(R.id.l3InfoCatchGameView1);
         bStart = (Button)findViewById(R.id.buttonStart);
@@ -114,7 +119,9 @@ public class CatchGameActivity extends Activity {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.action_settings:
-                // Show the settingd
+                // Show the settings
+                Intent i = new Intent(getApplicationContext(), UserSettingActivity.class);
+                startActivityForResult(i, 1);
                 return true;
             case R.id.action_leaderboard:
                 // Show the leaderboard
