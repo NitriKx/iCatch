@@ -27,5 +27,6 @@
     <string name="alertdialog_gameover_title">Game over !</string>
     <string name="alertdialog_gameover_text"></string>
     <string name="alertdialog_gameover_buttontext">Ok</string>
+    <string name="preference_activity_title">Preferences</string>
 
 </resources>

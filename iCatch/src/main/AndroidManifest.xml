@@ -23,6 +23,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+                android:name="com.lemoalsauvere.universite.s6.progevenementielle.projetandroid.l3info_catchgameactivity.UserSettingActivity"
+                android:label="@string/preference_activity_title"
+                android:screenOrientation="sensorPortrait" >
+        </activity>
     </application>
 
 </manifest>
