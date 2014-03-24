@@ -48,24 +48,37 @@ public class CatchGameView extends View {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
-        Log.i(this.getClass().getSimpleName(), "View touched");
+        // Let the ScaleGestureDetector inspect all events.
+        super.onTouchEvent(event);
 
-        Iterator<Map.Entry<Fruit,Rect>> i = this.appleHitboxes.entrySet().iterator();
-        while(i.hasNext()) {
-            Map.Entry<Fruit, Rect> entry = i.next();
-            if(this.appleHitboxes.containsKey(entry.getKey())) {
-                Rect fruitHitbox = entry.getValue();
-                if(fruitHitbox.contains((int) event.getY(), (int) event.getX())) {
-                    this.fallingDownFruitsList.remove(entry.getKey());
-                    i.remove();
-                    synchronized (CatchGameView.class) {
-                        ScoreController.getInstance().incrementScoreByOne();
-                    }
-                    Log.i(this.getClass().getSimpleName(), "Fruit removed because it was clicked.");
+        int action = event.getActionMasked();
+
+        // If the user press the screen
+        switch (action) {
+            case MotionEvent.ACTION_DOWN: {
+
+                Log.i(this.getClass().getSimpleName(), "View touched");
+
+                // This logic is synchronized in order to avoid the "multiple event for on press" problem
+                synchronized (CatchGameView.class) {
+
+                    Iterator<Map.Entry<Fruit,Rect>> i = this.appleHitboxes.entrySet().iterator();
+                    while(i.hasNext()) {
+                        Map.Entry<Fruit, Rect> entry = i.next();
+                        if(this.appleHitboxes.containsKey(entry.getKey())) {
+                            Rect fruitHitbox = entry.getValue();
+                            if(fruitHitbox.contains((int) event.getY(), (int) event.getX())) {
+                                this.fallingDownFruitsList.remove(entry.getKey());
+                                i.remove();
+
+                                    ScoreController.getInstance().incrementScoreByOne();
+                                }
+                                Log.i(this.getClass().getSimpleName(), "Fruit removed because it was clicked.");
+                            }
+                        }
                 }
             }
         }
-
         return true;
     }
 
