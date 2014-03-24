@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.PopupMenu;
 import com.lemoalsauvere.universite.s6.progevenementielle.projetandroid.R;
 import com.lemoalsauvere.universite.s6.progevenementielle.projetandroid.l3info_catchgamedatastructure.Fruit;
+import com.lemoalsauvere.universite.s6.progevenementielle.projetandroid.l3info_catchgamedatastructure.ScoreController;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,10 +46,11 @@ public class CatchGameActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				buttonStartClickEventHandler();
-				
 			}
 
 		});
+
+
 
         fruitList = new ArrayList<Fruit>();
 		testInitFruitList();
@@ -60,14 +62,32 @@ public class CatchGameActivity extends Activity {
         return this.timerFallingFruits != null && launched;
     }
 
-    private void testInitFruitList() {
+    public void resetGame() {
+        // If the game is running we click the pause button
+        if(isGameRunning()) {
+            startAndPauseButtonPressed();
+        }
 
+        // Clear all the apples and restore the initial ones
+        this.fruitList.clear();
+        testInitFruitList();
+
+        // Reset the score and the lifes
+        ScoreController.getInstance().reset();
+
+        fruitView.resetView();
+    }
+
+    private void testInitFruitList() {
 		fruitList.add(new Fruit(new Point(15, 15)));
 		fruitList.add(new Fruit(new Point(15, 630)));
-		
 	}
 
 	private void buttonStartClickEventHandler() {
+        startAndPauseButtonPressed();
+	}
+
+    public void startAndPauseButtonPressed() {
         if(launched) {
             this.stopFallTimer();
             this.stopSpawnTimer();
@@ -79,7 +99,7 @@ public class CatchGameActivity extends Activity {
             bStart.setText(getResources().getString(R.string.btn_stop));
             launched = true;
         }
-	}
+    }
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
