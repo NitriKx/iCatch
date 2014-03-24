@@ -27,13 +27,6 @@ public class Fruit {
         return true;
     }
 
-    @Override
-    public int hashCode() {
-        int result = locationInScreen != null ? locationInScreen.hashCode() : 0;
-        result = 31 * result;
-        return result;
-    }
-
     public void setLocation(Point p){
 		locationInScreen = p;
 	}

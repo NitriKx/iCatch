@@ -27,7 +27,6 @@ public class CatchGameView extends View {
 	List<Fruit> fallingDownFruitsList = new ArrayList<Fruit>();
     Map<Fruit, Rect> appleHitboxes = Collections.synchronizedMap(new HashMap<Fruit, Rect>());
 	Bitmap applePict = BitmapFactory.decodeResource(getResources(), R.drawable.apple);
-	Bitmap applePict2 = BitmapFactory.decodeResource(getResources(),R.drawable.apple);
     int yAxisFallingFactor = 5;
 
 	
