@@ -51,31 +51,35 @@ public class CatchGameView extends View {
         // Let the ScaleGestureDetector inspect all events.
         super.onTouchEvent(event);
 
-        int action = event.getActionMasked();
+        // We only kill an apple if the game is running
+        CatchGameActivity catchGameActivity = (CatchGameActivity) this.getContext();
+        if(catchGameActivity.isGameRunning()) {
 
-        // If the user press the screen
-        switch (action) {
-            case MotionEvent.ACTION_DOWN: {
+            // If the user press the screen
+            int action = event.getActionMasked();
+            switch (action) {
+                case MotionEvent.ACTION_DOWN: {
 
-                Log.i(this.getClass().getSimpleName(), "View touched");
+                    Log.i(this.getClass().getSimpleName(), "View touched");
 
-                // This logic is synchronized in order to avoid the "multiple event for on press" problem
-                synchronized (CatchGameView.class) {
+                    // This logic is synchronized in order to avoid the "multiple event for on press" problem
+                    synchronized (CatchGameView.class) {
 
-                    Iterator<Map.Entry<Fruit,Rect>> i = this.appleHitboxes.entrySet().iterator();
-                    while(i.hasNext()) {
-                        Map.Entry<Fruit, Rect> entry = i.next();
-                        if(this.appleHitboxes.containsKey(entry.getKey())) {
-                            Rect fruitHitbox = entry.getValue();
-                            if(fruitHitbox.contains((int) event.getY(), (int) event.getX())) {
-                                this.fallingDownFruitsList.remove(entry.getKey());
-                                i.remove();
+                        Iterator<Map.Entry<Fruit,Rect>> i = this.appleHitboxes.entrySet().iterator();
+                        while(i.hasNext()) {
+                            Map.Entry<Fruit, Rect> entry = i.next();
+                            if(this.appleHitboxes.containsKey(entry.getKey())) {
+                                Rect fruitHitbox = entry.getValue();
+                                if(fruitHitbox.contains((int) event.getY(), (int) event.getX())) {
+                                    this.fallingDownFruitsList.remove(entry.getKey());
+                                    i.remove();
 
-                                    ScoreController.getInstance().incrementScoreByOne();
+                                        ScoreController.getInstance().incrementScoreByOne();
+                                    }
+                                    Log.i(this.getClass().getSimpleName(), "Fruit removed because it was clicked.");
                                 }
-                                Log.i(this.getClass().getSimpleName(), "Fruit removed because it was clicked.");
                             }
-                        }
+                    }
                 }
             }
         }

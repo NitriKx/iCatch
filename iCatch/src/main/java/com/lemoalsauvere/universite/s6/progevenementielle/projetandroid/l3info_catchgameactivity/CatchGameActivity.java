@@ -56,6 +56,10 @@ public class CatchGameActivity extends Activity {
 		
 	}
 
+    public boolean isGameRunning() {
+        return this.timerFallingFruits != null && launched;
+    }
+
     private void testInitFruitList() {
 
 		fruitList.add(new Fruit(new Point(15, 15)));
