@@ -5,14 +5,12 @@ import android.content.Context;
 import android.graphics.*;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import com.lemoalsauvere.universite.s6.progevenementielle.projetandroid.R;
 import com.lemoalsauvere.universite.s6.progevenementielle.projetandroid.l3info_catchgamedatastructure.Fruit;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 /* 
  * Custom view for displaying falling fruits
@@ -22,10 +20,11 @@ import java.util.TimerTask;
 public class CatchGameView extends View {
 
 	List<Fruit> fallingDownFruitsList = new ArrayList<Fruit>();
+    Map<Fruit, Rect> appleHitboxes = new HashMap<Fruit, Rect>();
 	Bitmap applePict = BitmapFactory.decodeResource(getResources(), R.drawable.apple);
 	Bitmap applePict2 = BitmapFactory.decodeResource(getResources(),R.drawable.apple);
 	int fruitFallDelay = 1000;
-    int yAxisFallingFactor = 10;
+    int yAxisFallingFactor = 50;
 	Timer timerFallingFruits;
 	
 	public CatchGameView(Context context) {
@@ -61,16 +60,31 @@ public class CatchGameView extends View {
 	
 	private void timerEventHandler(){
 
-        Log.i("CatchGameView", "Making the fruits fallen...");
+        Log.i(this.getClass().getName(), "Making the fruits fallen...");
 
         // For each apple, we change its positions
+        Point viewSize = new Point();
+        this.getDisplay().getSize(viewSize);
+
         for(Fruit fruit : this.fallingDownFruitsList) {
             Point currentFruitLocation = fruit.getLocationInScreen();
             currentFruitLocation.x += yAxisFallingFactor;
-            fruit.setLocation(currentFruitLocation);
+
+            if(currentFruitLocation.y >= viewSize.y) {
+                deleteFruit(fruit);
+                Log.i(this.getClass().getName(), "Fruit removed because it reaches the bottom of the screen.");
+            } else {
+                fruit.setLocation(currentFruitLocation);
+            }
         }
+
         this.postInvalidate();
 	}
+
+    private void deleteFruit(Fruit f) {
+        this.appleHitboxes.remove(f);
+        this.fallingDownFruitsList.remove(f);
+    }
 	
 	public void setFruitFallDelay(int delay){
 		fruitFallDelay = delay;
@@ -89,6 +103,7 @@ public class CatchGameView extends View {
 		for (Fruit fruit : fallingDownFruitsList){
             Rect fruitBounds = new Rect(fruit.getLocationInScreen().x, fruit.getLocationInScreen().y, 2*(fruit.getRadius()), 2*(fruit.getRadius()));
 			canvas.drawBitmap(applePict, fruitBounds.top, fruitBounds.left,null);
+            this.appleHitboxes.put(fruit, fruitBounds);
 		}
 		
 	}
