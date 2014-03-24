@@ -10,9 +10,12 @@
 
     <!-- Settings menu -->
     <string name="pref_user_profile">User profile</string> <!-- Section -->
-    <string name="pref_user_name">Set username</string>
+    <string name="pref_user_setname">Set username</string>
     <string name="pref_game_settings">Game settings</string> <!-- Section -->
     <string name="pref_game_difficulty">Difficulty</string>
+    <string name="pref_game_lifes">Number of lifes</string>
+    <string name="pref_game_reset">Reset leaderboard</string>
+
 
 
     <!-- Visible strings on main interface -->
