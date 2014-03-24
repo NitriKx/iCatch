@@ -1,14 +1,17 @@
 package com.lemoalsauvere.universite.s6.progevenementielle.projetandroid.l3info_catchgameactivity;
 
 import android.R.color;
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.*;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
+import android.widget.TextView;
 import com.lemoalsauvere.universite.s6.progevenementielle.projetandroid.R;
 import com.lemoalsauvere.universite.s6.progevenementielle.projetandroid.l3info_catchgamedatastructure.Fruit;
+import com.lemoalsauvere.universite.s6.progevenementielle.projetandroid.l3info_catchgamedatastructure.ScoreController;
 
 import java.util.*;
 
@@ -98,6 +101,9 @@ public class CatchGameView extends View {
 	@Override
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
+
+        ((TextView) ((Activity) this.getContext()).findViewById(R.id.textScore)).setText(ScoreController.getInstance().getScore() + "");
+
 		canvas.drawColor(color.holo_green_dark);
 
 		for (Fruit fruit : fallingDownFruitsList){

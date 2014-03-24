@@ -43,4 +43,8 @@ public class ScoreController {
         score = 0;
         life = 3;
     }
+
+    public void addScore(int add) {
+        score += add;
+    }
 }

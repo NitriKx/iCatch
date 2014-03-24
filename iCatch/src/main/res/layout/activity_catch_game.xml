@@ -26,6 +26,18 @@
         android:gravity="center_horizontal|right"
         android:orientation="horizontal" >
 
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Score : "
+                android:id="@+id/labelScore"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="0"
+                android:id="@+id/textScore"/>
         <Button
             android:id="@+id/buttonStop"
             android:layout_width="wrap_content"
