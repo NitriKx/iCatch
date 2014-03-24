@@ -5,9 +5,11 @@ import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.PopupMenu;
 import com.lemoalsauvere.universite.s6.progevenementielle.projetandroid.R;
 import com.lemoalsauvere.universite.s6.progevenementielle.projetandroid.l3info_catchgamedatastructure.Fruit;
 
@@ -22,6 +24,7 @@ import java.util.TimerTask;
  * To be modified to implement your own version of the game
  */
 public class CatchGameActivity extends Activity {
+    boolean launched = false;
     Timer timerFallingFruits;
     Timer timerSpawnFruits;
     int fruitFallDelay = 50;
@@ -29,17 +32,14 @@ public class CatchGameActivity extends Activity {
 	List<Fruit> fruitList;
 	CatchGameView fruitView;
 	Button bStart;
-	Button bStop;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_catch_game);
 		fruitView = (CatchGameView)findViewById(R.id.l3InfoCatchGameView1);
-		bStart = (Button)findViewById(R.id.buttonStart);
-		bStop = (Button)findViewById(R.id.buttonStop);
-		bStop.setEnabled(false);
-		
+        bStart = (Button)findViewById(R.id.buttonStart);
+
 		bStart.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -50,25 +50,11 @@ public class CatchGameActivity extends Activity {
 
 		});
 
-        bStop.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                buttonStopClickEventHandler();
-            }
-        });
-
         fruitList = new ArrayList<Fruit>();
 		testInitFruitList();
 		fruitView.setFruitList(fruitList);
 		
 	}
-
-    private void buttonStopClickEventHandler() {
-        this.stopFallTimer();
-        this.stopSpawnTimer();
-        bStop.setEnabled(false);
-        bStart.setEnabled(true);
-    }
 
     private void testInitFruitList() {
 
@@ -78,10 +64,17 @@ public class CatchGameActivity extends Activity {
 	}
 
 	private void buttonStartClickEventHandler() {
-		this.initFallTimer();
-        this.initSpawnTimer();
-		bStop.setEnabled(true);
-		bStart.setEnabled(false);
+        if(launched) {
+            this.stopFallTimer();
+            this.stopSpawnTimer();
+            bStart.setText(getResources().getString(R.string.btn_start));
+            launched = false;
+        } else {
+            this.initFallTimer();
+            this.initSpawnTimer();
+            bStart.setText(getResources().getString(R.string.btn_stop));
+            launched = true;
+        }
 	}
 	
 	@Override
