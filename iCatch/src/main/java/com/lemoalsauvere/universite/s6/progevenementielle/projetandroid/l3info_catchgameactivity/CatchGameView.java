@@ -60,7 +60,7 @@ public class CatchGameView extends View {
 	
 	private void timerEventHandler(){
 
-        Log.i(this.getClass().getName(), "Making the fruits fallen...");
+        Log.i(this.getClass().getSimpleName(), "Making the fruits fallen...");
 
         // For each apple, we change its positions
         Point viewSize = new Point();
@@ -70,9 +70,9 @@ public class CatchGameView extends View {
             Point currentFruitLocation = fruit.getLocationInScreen();
             currentFruitLocation.x += yAxisFallingFactor;
 
-            if(currentFruitLocation.y >= viewSize.y) {
+            if(currentFruitLocation.x >= viewSize.x) {
                 deleteFruit(fruit);
-                Log.i(this.getClass().getName(), "Fruit removed because it reaches the bottom of the screen.");
+                Log.i(this.getClass().getSimpleName(), "Fruit removed because it reaches the bottom of the screen.");
             } else {
                 fruit.setLocation(currentFruitLocation);
             }
