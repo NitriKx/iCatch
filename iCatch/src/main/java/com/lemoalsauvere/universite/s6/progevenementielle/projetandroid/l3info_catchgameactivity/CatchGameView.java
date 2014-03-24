@@ -115,6 +115,7 @@ public class CatchGameView extends View {
 
                 // Refresh score
                 ((TextView) parent.findViewById(R.id.textScore)).setText(ScoreController.getInstance().getScore() + "");
+                ((TextView) parent.findViewById(R.id.textVie)).setText(ScoreController.getInstance().getLife() + "");
 
             }
         });
