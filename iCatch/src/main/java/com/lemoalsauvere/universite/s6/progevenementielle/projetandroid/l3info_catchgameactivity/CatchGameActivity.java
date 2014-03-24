@@ -64,8 +64,8 @@ public class CatchGameActivity extends Activity {
 
     private void testInitFruitList() {
 		fruitList = new ArrayList<Fruit>();
-		fruitList.add(new Fruit(new Point(15, 15), 22));
-		fruitList.add(new Fruit(new Point(215, 255), 22));
+		fruitList.add(new Fruit(new Point(15, 15), 25));
+		fruitList.add(new Fruit(new Point(15, 630), 25));
 		
 	}
 
