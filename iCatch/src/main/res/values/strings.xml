@@ -32,6 +32,10 @@
     <string name="alertdialog_gameover_title">Game over !</string>
     <string name="alertdialog_gameover_text">You lost all your life. The game is over and your score is %d.</string>
     <string name="alertdialog_gameover_buttontext">Ok</string>
+
+    <!-- Default settings -->
     <string name="def_username">Unknown player</string>
+    <string name="def_difficulty">2</string>
+    <string name="def_nbLives">3</string>
 
 </resources>
