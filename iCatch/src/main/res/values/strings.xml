@@ -30,7 +30,7 @@
 
     <!-- Gameover popup -->
     <string name="alertdialog_gameover_title">Game over !</string>
-    <string name="alertdialog_gameover_text"></string>
+    <string name="alertdialog_gameover_text">You lost all your life. The game is over and your score is %d.</string>
     <string name="alertdialog_gameover_buttontext">Ok</string>
     <string name="def_username">Unknown player</string>
 

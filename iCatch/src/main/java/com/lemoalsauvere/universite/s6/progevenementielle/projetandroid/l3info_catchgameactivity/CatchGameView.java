@@ -117,7 +117,7 @@ public class CatchGameView extends View {
                             // Create and display the popup
                             AlertDialog gameOverPopup = new AlertDialog.Builder(catchGameActivity)
                                     .setTitle(R.string.alertdialog_gameover_title)
-                                    .setMessage(String.format("You lost all your life. The game is over and your score is %d.", ScoreController.getInstance().getScore()))
+                                    .setMessage(getResources().getString(R.string.alertdialog_gameover_text, ScoreController.getInstance().getScore()))
                                     .setCancelable(true)
                                     .setNeutralButton(R.string.alertdialog_gameover_buttontext, new DialogInterface.OnClickListener() {
                                         @Override
