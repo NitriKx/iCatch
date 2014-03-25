@@ -20,7 +20,7 @@
 
 
     <!-- Visible strings on main interface -->
-    <string name="text_score">Score : </string>
+    <string name="text_score">Score : %d</string>
 
     <!-- Main buttons -->
     <string name="btn_pause">Pause</string>

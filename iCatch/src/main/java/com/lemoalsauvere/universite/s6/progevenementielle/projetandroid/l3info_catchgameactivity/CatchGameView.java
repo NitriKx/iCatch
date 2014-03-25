@@ -166,9 +166,9 @@ public class CatchGameView extends View {
         catchGameActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                // Refresh score and life
-                ((TextView) catchGameActivity.findViewById(R.id.textScore)).setText(ScoreController.getInstance().getScore() + "");
-//                ((TextView) catchGameActivity.findViewById(R.id.textVie)).setText(ScoreController.getInstance().getLife() + "");
+                // Refresh score
+                ((TextView) catchGameActivity.findViewById(R.id.textScore))
+                        .setText(getResources().getString(R.string.text_score,ScoreController.getInstance().getScore()));
             }
         });
 
