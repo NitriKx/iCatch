@@ -15,6 +15,7 @@
     <string name="pref_game_settings">Game settings</string> <!-- Section -->
     <string name="pref_game_difficulty">Difficulty</string>
     <string name="pref_game_lives">Number of lives</string>
+    <string name="pref_game_icons">Change falling object icon</string>
     <string name="pref_game_reset">Reset leaderboard</string>
 
 
@@ -36,5 +37,6 @@
     <string name="def_username">Unknown player</string>
     <string name="def_difficulty">2</string>
     <string name="def_nbLives">3</string>
+    <string name="def_icon">1</string>
 
 </resources>

@@ -1,14 +1,12 @@
 package com.lemoalsauvere.universite.s6.progevenementielle.projetandroid.l3info_catchgameactivity;
 
 import android.R.color;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.*;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
@@ -28,7 +26,6 @@ public class CatchGameView extends View {
 
 	List<Fruit> fallingDownFruitsList = new ArrayList<Fruit>();
     Map<Fruit, Rect> appleHitboxes = Collections.synchronizedMap(new HashMap<Fruit, Rect>());
-	Bitmap applePict = BitmapFactory.decodeResource(getResources(), R.drawable.apple);
 
     final CatchGameActivity catchGameActivity = (CatchGameActivity) this.getContext();
 
@@ -97,7 +94,7 @@ public class CatchGameView extends View {
         while(iterator.hasNext()) {
             Fruit fruit = iterator.next();
             Point currentFruitLocation = fruit.getLocationInScreen();
-            currentFruitLocation.x += catchGameActivity.getFallingFactor();
+            currentFruitLocation.x += catchGameActivity.getFruitFallFactor();
 
             if(currentFruitLocation.x >= this.getBottom() - 200) {
                 this.appleHitboxes.remove(fruit);
@@ -167,16 +164,18 @@ public class CatchGameView extends View {
             public void run() {
                 // Refresh score
                 ((TextView) catchGameActivity.findViewById(R.id.textScore))
-                        .setText(getResources().getString(R.string.text_score,ScoreController.getInstance().getScore()));
+                        .setText(getResources().getString(R.string.text_score, ScoreController.getInstance().getScore()));
             }
         });
+
+        Bitmap fallingObjectPict = catchGameActivity.getFallingObjectPict();
 
         // This array is a special ArrayList which guarantee that the iterator will never throw a ConcurrentModificationException
         CopyOnWriteArrayList<Fruit> copyOnWriteArrayList = new CopyOnWriteArrayList<Fruit>(fallingDownFruitsList);
         for (Fruit fruit : copyOnWriteArrayList){
             Rect fruitBounds = new Rect(fruit.getLocationInScreen().x, fruit.getLocationInScreen().y,
-                    fruit.getLocationInScreen().x + applePict.getWidth(), fruit.getLocationInScreen().y + applePict.getHeight());
-            canvas.drawBitmap(applePict, fruitBounds.top, fruitBounds.left, null);
+                    fruit.getLocationInScreen().x + fallingObjectPict.getWidth(), fruit.getLocationInScreen().y + fallingObjectPict.getHeight());
+            canvas.drawBitmap(fallingObjectPict, fruitBounds.top, fruitBounds.left, null);
             this.appleHitboxes.put(fruit, fruitBounds);
         }
 	}

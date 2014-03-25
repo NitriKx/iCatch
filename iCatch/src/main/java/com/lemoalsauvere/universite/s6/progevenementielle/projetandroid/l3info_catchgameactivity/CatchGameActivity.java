@@ -3,6 +3,8 @@ package com.lemoalsauvere.universite.s6.progevenementielle.projetandroid.l3info_
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -31,10 +33,13 @@ public class CatchGameActivity extends Activity {
     boolean launched = false;
     Timer timerFallingFruits;
     Timer timerSpawnFruits;
+
     int fruitFallDelay = 40;
     int fruitSpawnDelay = 500;
-    int fallingFactor = 5;
-	List<Fruit> fruitList;
+    int fruitFallFactor = 5;
+    Bitmap fallingObjectPict;
+
+    List<Fruit> fruitList;
 	CatchGameView fruitView;
     LifeView lifeView;
 	Button bStart;
@@ -48,8 +53,11 @@ public class CatchGameActivity extends Activity {
 
         updateLife();
         updateDifficulty();
+        updateIcon();
+
 
         setContentView(R.layout.activity_catch_game);
+
         fruitView = (CatchGameView)findViewById(R.id.l3InfoCatchGameView1);
         lifeView = (LifeView)findViewById(R.id.l3InfoCatchLifeView1);
 
@@ -70,27 +78,50 @@ public class CatchGameActivity extends Activity {
 		
 	}
 
+    private void updateIcon() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String iconSelected = prefs.getString("prefIcon", "");
+
+        switch (iconSelected.charAt(0)) {
+            case '1':
+                fallingObjectPict = BitmapFactory.decodeResource(getResources(), R.drawable.apple);
+                break;
+            case '2':
+                fallingObjectPict = BitmapFactory.decodeResource(getResources(), R.drawable.doge);
+                break;
+            case '3':
+                fallingObjectPict = BitmapFactory.decodeResource(getResources(), R.drawable.bitcoin);
+                break;
+            case '4':
+                fallingObjectPict = BitmapFactory.decodeResource(getResources(), R.drawable.waldo);
+                break;
+            case '5':
+                fallingObjectPict = BitmapFactory.decodeResource(getResources(), R.drawable.awesome);
+                break;
+        }
+    }
+
     private void updateDifficulty() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        int difficulty = Integer.parseInt(prefs.getString("prefDifficulty",""));
+        String difficultySelected = prefs.getString("prefDifficulty", "");
 
-        switch (difficulty) {
-            case 1:
-                this.fallingFactor = 3;
+        switch (difficultySelected.charAt(0)) {
+            case '1':
+                this.fruitFallFactor = 3;
                 this.fruitFallDelay = 50;
                 this.fruitSpawnDelay = 600;
                 break;
-            case 2:
-                this.fallingFactor = 5;
+            case '2':
+                this.fruitFallFactor = 5;
                 this.fruitFallDelay = 40;
                 this.fruitSpawnDelay = 450;
                 break;
-            case 3:
-                this.fallingFactor = 8;
+            case '3':
+                this.fruitFallFactor = 8;
                 this.fruitFallDelay = 40;
                 this.fruitSpawnDelay = 300;
-            case 4:
-                this.fallingFactor = 11;
+            case '4':
+                this.fruitFallFactor = 11;
                 this.fruitFallDelay = 40;
                 this.fruitSpawnDelay = 150;
                 break;
@@ -116,6 +147,7 @@ public class CatchGameActivity extends Activity {
         ScoreController.getInstance().reset();
         updateLife();
         updateDifficulty();
+        updateIcon();
 
         fruitView.resetView();
         refreshLives();
@@ -218,8 +250,12 @@ public class CatchGameActivity extends Activity {
         return launched && play;
     }
 
-    public int getFallingFactor() {
-        return fallingFactor;
+    public int getFruitFallFactor() {
+        return fruitFallFactor;
+    }
+
+    public Bitmap getFallingObjectPict() {
+        return fallingObjectPict;
     }
 
     @Override
@@ -231,6 +267,7 @@ public class CatchGameActivity extends Activity {
                 if (! launched) {
                     updateLife();
                     updateDifficulty();
+                    updateIcon();
                     fruitView.refreshView();
                     refreshLives();
                 }
