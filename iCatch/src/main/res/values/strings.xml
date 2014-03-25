@@ -24,7 +24,8 @@
     <string name="text_score">Score : </string>
 
     <!-- Main buttons -->
-    <string name="btn_stop">Pause</string>
+    <string name="btn_pause">Pause</string>
+    <string name="btn_unpause">Unpause</string>
     <string name="btn_start">Start</string>
 
     <!-- Gameover popup -->

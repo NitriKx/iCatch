@@ -76,12 +76,12 @@ public class CatchGameView extends View {
                                 if(fruitHitbox.contains((int) event.getY(), (int) event.getX())) {
                                     this.fallingDownFruitsList.remove(entry.getKey());
                                     i.remove();
-
-                                        ScoreController.getInstance().incrementScoreByOne();
-                                    }
+                                    ScoreController.getInstance().incrementScoreByOne();
                                     Log.i(this.getClass().getSimpleName(), "Fruit removed because it was clicked.");
+                                    return true;
                                 }
                             }
+                        }
                     }
                 }
             }

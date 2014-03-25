@@ -49,4 +49,8 @@ public class ScoreController {
     public synchronized void addScore(int add) {
         score += add;
     }
+
+    public void setLife(int life) {
+        this.life = life;
+    }
 }

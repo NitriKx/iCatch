@@ -12,14 +12,14 @@
         <ListPreference
                 android:key="prefDifficulty"
                 android:entries="@array/difficulty"
-                android:entryValues="@array/difficulty"
+                android:entryValues="@array/difficulty_values"
                 android:title="@string/pref_game_difficulty"
-                android:defaultValue="Medium"/>
+                android:defaultValue="2" />
 
         <ListPreference
                 android:key="prefNbLives"
                 android:entries="@array/nbLives"
-                android:entryValues="@array/nbLives"
+                android:entryValues="@array/nbLives_values"
                 android:title="@string/pref_game_lives"
                 android:defaultValue="3" />
     </PreferenceCategory>

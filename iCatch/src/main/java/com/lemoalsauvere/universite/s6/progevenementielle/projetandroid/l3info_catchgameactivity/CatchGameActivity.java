@@ -2,17 +2,16 @@ package com.lemoalsauvere.universite.s6.progevenementielle.projetandroid.l3info_
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.PopupMenu;
 import com.lemoalsauvere.universite.s6.progevenementielle.projetandroid.R;
 import com.lemoalsauvere.universite.s6.progevenementielle.projetandroid.l3info_catchgamedatastructure.Fruit;
 import com.lemoalsauvere.universite.s6.progevenementielle.projetandroid.l3info_catchgamedatastructure.ScoreController;
@@ -28,11 +27,12 @@ import java.util.TimerTask;
  * To be modified to implement your own version of the game
  */
 public class CatchGameActivity extends Activity {
+    boolean play = false;
     boolean launched = false;
     Timer timerFallingFruits;
     Timer timerSpawnFruits;
-    int fruitFallDelay = 50;
-    int fruitSpawnDelay = 600;
+    int fruitFallDelay = 45;
+    int fruitSpawnDelay = 500;
 	List<Fruit> fruitList;
 	CatchGameView fruitView;
 	Button bStart;
@@ -42,12 +42,17 @@ public class CatchGameActivity extends Activity {
 		super.onCreate(savedInstanceState);
 
         PreferenceManager.setDefaultValues(this, R.xml.settings, false);
+//        ScoreController.getInstance().setLife(PreferenceManager.getDefaultSharedPreferences());
 
-		setContentView(R.layout.activity_catch_game);
-		fruitView = (CatchGameView)findViewById(R.id.l3InfoCatchGameView1);
+        updateLife();
+        updateDifficulty();
+
+        setContentView(R.layout.activity_catch_game);
+        fruitView = (CatchGameView)findViewById(R.id.l3InfoCatchGameView1);
         bStart = (Button)findViewById(R.id.buttonStart);
 
-		bStart.setOnClickListener(new OnClickListener() {
+
+        bStart.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
@@ -59,29 +64,58 @@ public class CatchGameActivity extends Activity {
 
 
         fruitList = new ArrayList<Fruit>();
-		testInitFruitList();
+//		testInitFruitList();
 		fruitView.setFruitList(fruitList);
 		
 	}
 
-    public boolean isGameRunning() {
-        return this.timerFallingFruits != null && launched;
+    private void updateDifficulty() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        int difficulty = Integer.parseInt(prefs.getString("prefDifficulty",""));
+
+        switch (difficulty) {
+            case 1:
+                this.fruitFallDelay = 70;
+                this.fruitSpawnDelay = 700;
+                break;
+            case 2:
+                this.fruitFallDelay = 45;
+                this.fruitSpawnDelay = 500;
+                break;
+            case 3:
+                this.fruitFallDelay = 20;
+                this.fruitSpawnDelay = 300;
+                break;
+        }
     }
 
     public void resetGame() {
         // If the game is running we click the pause button
-        if(isGameRunning()) {
-            startAndPauseButtonPressed();
+        if(launched) {
+            this.stopFallTimer();
+            this.stopSpawnTimer();
+            bStart.setText(getResources().getString(R.string.btn_start));
         }
+
+        play = false;
+        launched = false;
 
         // Clear all the apples and restore the initial ones
         this.fruitList.clear();
-        testInitFruitList();
+//        testInitFruitList();
 
         // Reset the score and the lifes
         ScoreController.getInstance().reset();
+        updateLife();
+        updateDifficulty();
 
         fruitView.resetView();
+    }
+
+    private void updateLife() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        int nbLive = Integer.parseInt(prefs.getString("prefNbLives",""));
+        ScoreController.getInstance().setLife(nbLive);
     }
 
     private void testInitFruitList() {
@@ -94,16 +128,20 @@ public class CatchGameActivity extends Activity {
 	}
 
     public void startAndPauseButtonPressed() {
-        if(launched) {
+        if(!launched) {
+            launched = true;
+        }
+
+        if(play) {
             this.stopFallTimer();
             this.stopSpawnTimer();
-            bStart.setText(getResources().getString(R.string.btn_start));
-            launched = false;
+            bStart.setText(getResources().getString(R.string.btn_unpause));
+            play = false;
         } else {
             this.initFallTimer();
             this.initSpawnTimer();
-            bStart.setText(getResources().getString(R.string.btn_stop));
-            launched = true;
+            bStart.setText(getResources().getString(R.string.btn_pause));
+            play = true;
         }
     }
 	
@@ -167,4 +205,23 @@ public class CatchGameActivity extends Activity {
         timerSpawnFruits.cancel();
     }
 
+    public boolean isGameRunning() {
+        return launched && play;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+            case RESULT_FIRST_USER:
+                if (! launched) {
+                    updateLife();
+                    updateDifficulty();
+                    fruitView.refreshView();
+                }
+
+                break;
+        }
+    }
 }
