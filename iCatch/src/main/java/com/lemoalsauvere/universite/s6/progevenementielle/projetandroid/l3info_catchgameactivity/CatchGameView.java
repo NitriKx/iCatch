@@ -126,13 +126,7 @@ public class CatchGameView extends View {
                                     .setOnDismissListener(new DialogInterface.OnDismissListener() {
                                         @Override
                                         public void onDismiss(DialogInterface dialog) {
-                                            catchGameActivity.resetGame();
-                                        }
-                                    })
-                                    .setOnCancelListener(new DialogInterface.OnCancelListener() {
-                                        @Override
-                                        public void onCancel(DialogInterface dialog) {
-                                            catchGameActivity.resetGame();
+                                            catchGameActivity.saveScoreAndResetGame();
                                         }
                                     })
                                     .create();

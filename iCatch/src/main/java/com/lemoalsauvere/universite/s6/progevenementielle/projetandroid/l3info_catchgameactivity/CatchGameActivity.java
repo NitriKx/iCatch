@@ -16,12 +16,11 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import com.lemoalsauvere.universite.s6.progevenementielle.projetandroid.R;
 import com.lemoalsauvere.universite.s6.progevenementielle.projetandroid.l3info_catchgamedatastructure.Fruit;
+import com.lemoalsauvere.universite.s6.progevenementielle.projetandroid.l3info_catchgamedatastructure.LeaderboardController;
+import com.lemoalsauvere.universite.s6.progevenementielle.projetandroid.l3info_catchgamedatastructure.LeaderboardModel;
 import com.lemoalsauvere.universite.s6.progevenementielle.projetandroid.l3info_catchgamedatastructure.ScoreController;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 /* 
  * Main screen for the game
@@ -72,10 +71,12 @@ public class CatchGameActivity extends Activity {
 
 		});
 
-        fruitList = new ArrayList<Fruit>();
+        fruitList = Collections.synchronizedList(new ArrayList<Fruit>());
 //		testInitFruitList();
 		fruitView.setFruitList(fruitList);
-		
+
+
+        LeaderboardController.getInstance().init(this);
 	}
 
     private void updateIcon() {
@@ -126,6 +127,13 @@ public class CatchGameActivity extends Activity {
                 this.fruitSpawnDelay = 150;
                 break;
         }
+    }
+
+    public void saveScoreAndResetGame() {
+        int score = ScoreController.getInstance().getScore();
+        String playerName = PreferenceManager.getDefaultSharedPreferences(this).getString("prefUsername", "");
+        LeaderboardController.getInstance().addNewScore(playerName, score);
+        resetGame();
     }
 
     public void resetGame() {
