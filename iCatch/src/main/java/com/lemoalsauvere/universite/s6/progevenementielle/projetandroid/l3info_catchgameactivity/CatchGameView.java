@@ -106,6 +106,8 @@ public class CatchGameView extends View {
                 ScoreController.getInstance().looseLife();
                 Log.i(this.getClass().getSimpleName(), "Fruit removed because it reaches the bottom of the screen.");
 
+                catchGameActivity.refreshLives();
+
                 // If the player is dead we show the "GameOver" popver an then we reset the game
                 if(ScoreController.getInstance().getLife() == 0) {
                     catchGameActivity.runOnUiThread(new Runnable() {
@@ -166,7 +168,7 @@ public class CatchGameView extends View {
             public void run() {
                 // Refresh score and life
                 ((TextView) catchGameActivity.findViewById(R.id.textScore)).setText(ScoreController.getInstance().getScore() + "");
-                ((TextView) catchGameActivity.findViewById(R.id.textVie)).setText(ScoreController.getInstance().getLife() + "");
+//                ((TextView) catchGameActivity.findViewById(R.id.textVie)).setText(ScoreController.getInstance().getLife() + "");
             }
         });
 

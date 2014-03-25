@@ -20,7 +20,6 @@
 
 
     <!-- Visible strings on main interface -->
-    <string name="text_life">Life : </string>
     <string name="text_score">Score : </string>
 
     <!-- Main buttons -->

@@ -35,6 +35,7 @@ public class CatchGameActivity extends Activity {
     int fruitSpawnDelay = 500;
 	List<Fruit> fruitList;
 	CatchGameView fruitView;
+    LifeView lifeView;
 	Button bStart;
 	
 	@Override
@@ -49,8 +50,9 @@ public class CatchGameActivity extends Activity {
 
         setContentView(R.layout.activity_catch_game);
         fruitView = (CatchGameView)findViewById(R.id.l3InfoCatchGameView1);
-        bStart = (Button)findViewById(R.id.buttonStart);
+        lifeView = (LifeView)findViewById(R.id.l3InfoCatchLifeView1);
 
+        bStart = (Button)findViewById(R.id.buttonStart);
 
         bStart.setOnClickListener(new OnClickListener() {
 			
@@ -60,8 +62,6 @@ public class CatchGameActivity extends Activity {
 			}
 
 		});
-
-
 
         fruitList = new ArrayList<Fruit>();
 //		testInitFruitList();
@@ -110,6 +110,7 @@ public class CatchGameActivity extends Activity {
         updateDifficulty();
 
         fruitView.resetView();
+        refreshLives();
     }
 
     private void updateLife() {
@@ -219,9 +220,14 @@ public class CatchGameActivity extends Activity {
                     updateLife();
                     updateDifficulty();
                     fruitView.refreshView();
+                    refreshLives();
                 }
 
                 break;
         }
+    }
+
+    public void refreshLives() {
+        lifeView.refreshView();
     }
 }
