@@ -29,7 +29,6 @@ public class CatchGameView extends View {
 	List<Fruit> fallingDownFruitsList = new ArrayList<Fruit>();
     Map<Fruit, Rect> appleHitboxes = Collections.synchronizedMap(new HashMap<Fruit, Rect>());
 	Bitmap applePict = BitmapFactory.decodeResource(getResources(), R.drawable.apple);
-    int yAxisFallingFactor = 5;
 
     final CatchGameActivity catchGameActivity = (CatchGameActivity) this.getContext();
 
@@ -98,7 +97,7 @@ public class CatchGameView extends View {
         while(iterator.hasNext()) {
             Fruit fruit = iterator.next();
             Point currentFruitLocation = fruit.getLocationInScreen();
-            currentFruitLocation.x += yAxisFallingFactor;
+            currentFruitLocation.x += catchGameActivity.getFallingFactor();
 
             if(currentFruitLocation.x >= this.getBottom() - 200) {
                 this.appleHitboxes.remove(fruit);

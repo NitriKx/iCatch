@@ -31,8 +31,9 @@ public class CatchGameActivity extends Activity {
     boolean launched = false;
     Timer timerFallingFruits;
     Timer timerSpawnFruits;
-    int fruitFallDelay = 45;
+    int fruitFallDelay = 40;
     int fruitSpawnDelay = 500;
+    int fallingFactor = 5;
 	List<Fruit> fruitList;
 	CatchGameView fruitView;
     LifeView lifeView;
@@ -75,16 +76,23 @@ public class CatchGameActivity extends Activity {
 
         switch (difficulty) {
             case 1:
-                this.fruitFallDelay = 70;
-                this.fruitSpawnDelay = 700;
+                this.fallingFactor = 3;
+                this.fruitFallDelay = 50;
+                this.fruitSpawnDelay = 600;
                 break;
             case 2:
-                this.fruitFallDelay = 45;
-                this.fruitSpawnDelay = 500;
+                this.fallingFactor = 5;
+                this.fruitFallDelay = 40;
+                this.fruitSpawnDelay = 450;
                 break;
             case 3:
-                this.fruitFallDelay = 20;
+                this.fallingFactor = 8;
+                this.fruitFallDelay = 40;
                 this.fruitSpawnDelay = 300;
+            case 4:
+                this.fallingFactor = 11;
+                this.fruitFallDelay = 40;
+                this.fruitSpawnDelay = 150;
                 break;
         }
     }
@@ -210,6 +218,10 @@ public class CatchGameActivity extends Activity {
         return launched && play;
     }
 
+    public int getFallingFactor() {
+        return fallingFactor;
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -229,5 +241,14 @@ public class CatchGameActivity extends Activity {
 
     public void refreshLives() {
         lifeView.refreshView();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if(isGameRunning()) {
+            startAndPauseButtonPressed();
+        }
     }
 }
