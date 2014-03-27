@@ -9,10 +9,10 @@ import android.graphics.Point;
 public class Fruit {
 
 	private Point locationInScreen; //Where the fruit is located
-	
-	public Fruit(Point location){
-		locationInScreen = location;
-	}
+    public Fruit(Point location){
+        locationInScreen = location;
+    }
+
 
     @Override
     public boolean equals(Object o) {

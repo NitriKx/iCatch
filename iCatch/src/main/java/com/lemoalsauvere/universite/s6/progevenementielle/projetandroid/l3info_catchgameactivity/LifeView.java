@@ -30,8 +30,10 @@ public class LifeView extends View {
 
         Log.i(this.getClass().getSimpleName(), "Refreshing lives' counter");
 
+        int width = (int) (BitmapFactory.decodeResource(getResources(), R.drawable.life).getWidth() * 1.2);
+
         for(int i = 1; i <= ScoreController.getInstance().getLife(); i++) {
-            canvas.drawBitmap(lifePic, this.getWidth() - i * 50,  7, null);
+            canvas.drawBitmap(lifePic, this.getWidth() - i * width,  7, null);
         }
     }
 }
