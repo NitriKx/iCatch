@@ -5,10 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.TimeZone;
 
 /**
  * Created by Benoît Sauvère on 24/03/2014.
@@ -33,7 +30,7 @@ public class LeaderboardSQLiteOpenHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
 
     public static final SimpleDateFormat dateFormat = new SimpleDateFormat(
-            "yyyy-MM-dd HH:mm:ss");
+            "yyyy-MM-dd HH:mm:SS");
 
     // Database creation sql statement
     private static final String DATABASE_CREATE = "CREATE TABLE "

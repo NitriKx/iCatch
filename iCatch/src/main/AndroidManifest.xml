@@ -24,9 +24,13 @@
             </intent-filter>
         </activity>
         <activity
-                android:name="com.lemoalsauvere.universite.s6.progevenementielle.projetandroid.l3info_catchgameactivity.UserSettingActivity"
-                android:label="@string/preference_activity_title"
-                android:screenOrientation="sensorPortrait" >
+            android:name="com.lemoalsauvere.universite.s6.progevenementielle.projetandroid.l3info_catchgameactivity.UserSettingActivity"
+            android:label="@string/preference_activity_title"
+            android:screenOrientation="sensorPortrait" >
+        </activity>
+        <activity
+            android:name="com.lemoalsauvere.universite.s6.progevenementielle.projetandroid.l3info_catchgameactivity.LeaderboardActivity"
+            android:label="@string/title_activity_leaderboard" >
         </activity>
     </application>
 

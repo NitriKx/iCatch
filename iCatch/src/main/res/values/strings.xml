@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
     <string name="app_name">iCatch</string>
@@ -18,8 +19,6 @@
     <string name="pref_game_icons">Change falling object icon</string>
     <string name="pref_game_reset">Reset leaderboard</string>
 
-
-
     <!-- Visible strings on main interface -->
     <string name="text_score">Score : %d</string>
 
@@ -38,5 +37,7 @@
     <string name="def_difficulty">2</string>
     <string name="def_nbLives">3</string>
     <string name="def_icon">1</string>
+    <string name="title_activity_leaderboard">Leaderboard</string>
+    <string name="action_settings">Settings</string>
 
 </resources>

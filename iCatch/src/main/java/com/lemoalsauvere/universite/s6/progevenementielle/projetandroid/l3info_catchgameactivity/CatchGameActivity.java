@@ -17,7 +17,6 @@ import android.widget.Button;
 import com.lemoalsauvere.universite.s6.progevenementielle.projetandroid.R;
 import com.lemoalsauvere.universite.s6.progevenementielle.projetandroid.l3info_catchgamedatastructure.Fruit;
 import com.lemoalsauvere.universite.s6.progevenementielle.projetandroid.l3info_catchgamedatastructure.LeaderboardController;
-import com.lemoalsauvere.universite.s6.progevenementielle.projetandroid.l3info_catchgamedatastructure.LeaderboardModel;
 import com.lemoalsauvere.universite.s6.progevenementielle.projetandroid.l3info_catchgamedatastructure.ScoreController;
 
 import java.util.*;
@@ -211,7 +210,8 @@ public class CatchGameActivity extends Activity {
                 startActivityForResult(i, 1);
                 return true;
             case R.id.action_leaderboard:
-                // Show the leaderboard
+                Intent intent = new Intent(this, LeaderboardActivity.class);
+                startActivity(intent);
                 return true;
             case R.id.action_restart:
                 this.resetGame();
