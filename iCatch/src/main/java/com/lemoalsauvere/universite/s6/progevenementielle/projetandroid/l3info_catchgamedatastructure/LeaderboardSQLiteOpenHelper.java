@@ -30,7 +30,7 @@ public class LeaderboardSQLiteOpenHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
 
     public static final SimpleDateFormat dateFormat = new SimpleDateFormat(
-            "yyyy-MM-dd HH:mm:SS");
+            "yyyy-MM-dd HH:mm:ss");
 
     // Database creation sql statement
     private static final String DATABASE_CREATE = "CREATE TABLE "

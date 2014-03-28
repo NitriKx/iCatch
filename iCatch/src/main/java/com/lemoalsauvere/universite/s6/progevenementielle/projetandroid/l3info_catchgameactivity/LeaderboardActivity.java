@@ -90,7 +90,7 @@ public class LeaderboardActivity extends Activity {
 
 
 
-            for(int i = 0; i < sortedScore.size(); i++) {
+            while(sortedScore.size() > 0) {
 
                 LeaderboardModel score = sortedScore.poll();
 
