@@ -3,6 +3,7 @@ package com.lemoalsauvere.universite.s6.progevenementielle.projetandroid.l3info_
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.*;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -36,7 +37,7 @@ public class LeaderboardActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.leaderboard, menu);
+        // getMenuInflater().inflate(R.menu.leaderboard, menu);
         return true;
     }
 
@@ -53,7 +54,7 @@ public class LeaderboardActivity extends Activity {
     }
 
     /**
-     * A dummy fragment containing a simple view.
+     * The score table fragment
      */
     public static class TableScoreFragment extends Fragment {
 
@@ -66,6 +67,8 @@ public class LeaderboardActivity extends Activity {
             View rootView = inflater.inflate(R.layout.fragment_leaderboard, container, false);
 
             TableLayout tableLayout = (TableLayout) rootView.findViewById(R.id.leaderboard_table_score);
+            tableLayout.removeAllViewsInLayout();
+
             List<LeaderboardModel> leaderboardScores = LeaderboardController.getInstance().getLeaderboardScores();
 
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yy HH:mm:ss");
@@ -99,16 +102,19 @@ public class LeaderboardActivity extends Activity {
                 playerName.setText(score.getPlayerName());
                 playerName.setGravity(View.TEXT_ALIGNMENT_CENTER);
                 playerName.setLayoutParams(layoutParamsWithMatchParentAndWrap);
+                playerName.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
 
                 TextView playerScore = new TextView(inflater.getContext());
                 playerScore.setText(String.format("%d", score.getScore()));
                 playerScore.setGravity(View.TEXT_ALIGNMENT_CENTER);
                 playerScore.setLayoutParams(layoutParamsWithMatchParentAndWrap);
+                playerScore.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
 
                 TextView scoreDate = new TextView(inflater.getContext());
                 scoreDate.setText(dateFormat.format(score.getDate()));
                 scoreDate.setGravity(View.TEXT_ALIGNMENT_CENTER);
                 scoreDate.setLayoutParams(layoutParamsWithMatchParentAndWrap);
+                scoreDate.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
 
 
                 row.addView(playerName, 0);

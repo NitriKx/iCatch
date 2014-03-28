@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
-import org.w3c.dom.Comment;
 
 import java.sql.SQLException;
 import java.text.ParseException;
@@ -46,7 +45,7 @@ public class LeaderboardController {
 
 
     public void open() throws SQLException {
-        if(!isInitialized) throw new RuntimeException(String.format("LeaderboardController is not initilized."));
+        if(!isInitialized) throw new RuntimeException(String.format("LeaderboardController is not initialized."));
         database = sqlLiteOpenHelper.getWritableDatabase();
     }
 
@@ -96,23 +95,22 @@ public class LeaderboardController {
 
     public synchronized List<LeaderboardModel> getLeaderboardScores() {
         if(!isInitialized) throw new RuntimeException(String.format("LeaderboardController is not initialized."));
-        List<LeaderboardModel> comments = new ArrayList<LeaderboardModel>();
+        List<LeaderboardModel> scores = new ArrayList<LeaderboardModel>();
 
         try {
             open();
 
-            Cursor cursor = database.query(LeaderboardSQLiteOpenHelper.TABLE_NAME,
-                    LeaderboardSQLiteOpenHelper.COLUMN_LIST, null, null, null, null, null);
+            Cursor cursor = database.rawQuery("SELECT * FROM " + LeaderboardSQLiteOpenHelper.TABLE_NAME, null);
 
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
                 LeaderboardModel model = cursorToModel(cursor);
-                comments.add(model);
+                scores.add(model);
                 cursor.moveToNext();
             }
             // make sure to close the cursor
             cursor.close();
-            return comments;
+            return scores;
 
         } catch (Exception e) {
             throw new RuntimeException(String.format("Can not get the leaderboard scores from the database."), e);

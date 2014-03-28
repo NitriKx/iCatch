@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.graphics.*;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
@@ -90,55 +91,68 @@ public class CatchGameView extends View {
         // Log.i(this.getClass().getSimpleName(), "Making the fruits fallen...");
 
         // For each apple, we change its positions
-        Iterator<Fruit> iterator = this.fallingDownFruitsList.iterator();
-        while(iterator.hasNext()) {
-            Fruit fruit = iterator.next();
-            Point currentFruitLocation = fruit.getLocationInScreen();
-            currentFruitLocation.x += catchGameActivity.getFruitFallFactor();
+        synchronized (CatchGameView.class) {
+            Iterator<Fruit> iterator = this.fallingDownFruitsList.iterator();
+            while(iterator.hasNext()) {
+                Fruit fruit = iterator.next();
+                Point currentFruitLocation = fruit.getLocationInScreen();
+                currentFruitLocation.x += catchGameActivity.getFruitFallFactor();
 
-            if(currentFruitLocation.x >= this.getBottom() - 200) {
-                this.appleHitboxes.remove(fruit);
-                iterator.remove();
-                ScoreController.getInstance().looseLife();
-                Log.i(this.getClass().getSimpleName(), "Fruit removed because it reaches the bottom of the screen.");
+                if(currentFruitLocation.x >= this.getBottom() - 200) {
+                    this.appleHitboxes.remove(fruit);
+                    iterator.remove();
 
-                catchGameActivity.refreshLives();
+                    ScoreController.getInstance().looseLife();
+                    Log.i(this.getClass().getSimpleName(), "Fruit removed because it reaches the bottom of the screen.");
 
-                // If the player is dead we show the "GameOver" popver an then we reset the game
-                if(ScoreController.getInstance().getLife() == 0) {
-                    catchGameActivity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            // Pause the game
-                            catchGameActivity.startAndPauseButtonPressed();
+                    catchGameActivity.refreshLives();
 
-                            // Create and display the popup
-                            AlertDialog gameOverPopup = new AlertDialog.Builder(catchGameActivity)
-                                    .setTitle(R.string.alertdialog_gameover_title)
-                                    .setMessage(getResources().getString(R.string.alertdialog_gameover_text, ScoreController.getInstance().getScore()))
-                                    .setCancelable(true)
-                                    .setNeutralButton(R.string.alertdialog_gameover_buttontext, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            dialog.cancel();
-                                        }
-                                    })
-                                    .setOnDismissListener(new DialogInterface.OnDismissListener() {
-                                        @Override
-                                        public void onDismiss(DialogInterface dialog) {
-                                            catchGameActivity.saveScoreAndResetGame();
-                                        }
-                                    })
-                                    .create();
-                            gameOverPopup.show();
-                        }
-                    });
+                    // If the player is dead we show the "GameOver" popver an then we reset the game
+                    if(ScoreController.getInstance().getLife() == 0) {
+                        catchGameActivity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                // Pause the game
+                                catchGameActivity.startAndPauseButtonPressed();
+
+                                // Create and display the popup
+                                AlertDialog gameOverPopup = new AlertDialog.Builder(catchGameActivity)
+                                        .setTitle(R.string.alertdialog_gameover_title)
+                                        .setMessage(getResources().getString(R.string.alertdialog_gameover_text, ScoreController.getInstance().getScore()))
+                                        .setCancelable(false)
+                                        .setNeutralButton(R.string.alertdialog_gameover_buttontext, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                dialog.cancel();
+                                            }
+                                        })
+                                        .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                            @Override
+                                            public void onDismiss(DialogInterface dialog) {
+                                                catchGameActivity.saveScoreAndResetGame();
+                                            }
+                                        })
+                                        .setOnKeyListener(new DialogInterface.OnKeyListener() {
+
+                                            @Override
+                                            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                                                if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+                                                    dialog.dismiss();
+                                                    return true;
+                                                }
+                                                return false;
+                                            }
+                                        })
+                                        .create();
+                                gameOverPopup.show();
+                            }
+                        });
+                    }
+                } else {
+                    fruit.setLocation(currentFruitLocation);
                 }
-            } else {
-                fruit.setLocation(currentFruitLocation);
             }
         }
-
         this.postInvalidate();
 	}
 	
