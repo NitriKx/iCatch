@@ -117,13 +117,13 @@ public class CatchGameActivity extends Activity {
                 this.fruitSpawnDelay = 450;
                 break;
             case '3':
-                this.fruitFallFactor = 8;
+                this.fruitFallFactor = 7;
                 this.fruitFallDelay = 40;
-                this.fruitSpawnDelay = 300;
+                this.fruitSpawnDelay = 350;
             case '4':
-                this.fruitFallFactor = 11;
+                this.fruitFallFactor = 10;
                 this.fruitFallDelay = 40;
-                this.fruitSpawnDelay = 150;
+                this.fruitSpawnDelay = 200;
                 break;
         }
     }
