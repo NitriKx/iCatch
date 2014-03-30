@@ -30,7 +30,8 @@
         </activity>
         <activity
             android:name="com.lemoalsauvere.universite.s6.progevenementielle.projetandroid.l3info_catchgameactivity.LeaderboardActivity"
-            android:label="@string/title_activity_leaderboard" >
+            android:label="@string/title_activity_leaderboard"
+            android:screenOrientation="sensorPortrait" >
         </activity>
     </application>
 
