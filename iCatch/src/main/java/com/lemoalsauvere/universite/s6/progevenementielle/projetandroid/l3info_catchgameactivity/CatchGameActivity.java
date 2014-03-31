@@ -243,7 +243,9 @@ public class CatchGameActivity extends Activity {
             public void run() {
                 Log.i("Spawn : ", (int) (Math.random() * (fruitView.getWidth() - 50)) + "");
                 Fruit fruit = new Fruit(new Point(15, (int) (Math.random() * (fruitView.getWidth() - 50))));
-                fruitList.add(fruit);
+                synchronized (CatchGameView.class) {
+                    fruitList.add(fruit);
+                }
             }
         }, 0, fruitSpawnDelay);
     }
